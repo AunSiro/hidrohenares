@@ -1,0 +1,53 @@
+Sub Macro1()
+'
+' Macro1 Macro
+'
+
+'
+Dim length As Integer
+Dim proov, name As String
+Dim incombo As Boolean
+Application.DisplayAlerts = False
+
+Do While Range("A1").Value <> ""
+    proov = Range("A1").Value
+    length = 1
+    If Range("A2").Value = proov Then
+        incombo = True
+    Else
+        incombo = False
+    End If
+    
+    Do While incombo = True
+        length = length + 1
+        name = "A" & CStr(length + 1)
+        If Range(name).Value = proov Then
+            incombo = True
+        Else
+            incombo = False
+    End If
+    Loop
+    
+    name = "B1:D" & CStr(length)
+    Range(name).Select
+    Selection.Copy
+    Windows("p.xlsx").Activate
+    Range("A1").Select
+    ActiveSheet.Paste
+    Application.CutCopyMode = False
+    ActiveWorkbook.SaveAs Filename:= _
+        "C:\Users\Usuario\Desktop\HIDROHENARES\sap-precios-proovedor-nuevos\descomposición\p" & proov & ".xlsx", FileFormat:= _
+        xlOpenXMLWorkbook, CreateBackup:=False
+    Selection.ClearContents
+    ActiveWorkbook.SaveAs Filename:= _
+        "C:\Users\Usuario\Desktop\HIDROHENARES\sap-precios-proovedor-nuevos\descomposición\p.xlsx", FileFormat:= _
+        xlOpenXMLWorkbook, CreateBackup:=False
+    
+    Windows("datosfiltrados.xlsm").Activate
+    name = "1:" & CStr(length)
+    Rows(name).Select
+    Selection.Delete Shift:=xlUp
+    
+    
+Loop
+End Sub
